@@ -1,0 +1,42 @@
+\usepackage{graphicx}
+\usepackage{etoolbox}
+\usepackage{glob}
+\usepackage{xstring}
+
+\newcounter{imagecounter}
+
+\newcommand{\photolog}[1]{%
+  \begin{center}
+  Hole 
+  
+  E: 
+  
+  N: 
+  
+  \hfill
+  \break
+  Hole locations are derived from Figure 1
+  
+  \newpage
+  
+  \setcounter{imagecounter}{0} % reset the image counter
+  
+  % use glob to get all the image file names in the IMG directory
+  \foreach \imagefile in {./IMG/*}{
+    % use regular expression to extract the hole number
+    \StrBetween[1,2]{\imagefile}{/}{_}[\imagename]
+    % check if the extracted hole number matches the input
+    \ifstrequal{\imagename}{#1}{
+      \includegraphics[width=\textwidth]{\imagefile}
+      \par
+      \stepcounter{imagecounter}
+      \ifodd\theimagecounter
+        \newpage
+      \else
+        \hfill
+        \break
+      \fi
+    }{}
+  }
+  
+  \end{center}
